@@ -95,7 +95,15 @@ def plot_spectra(x_data, y_data, data_indexes = [], keys = list[str], shifter: i
 
             fig.savefig(fname=name, dpi=res, format='png', bbox_inches='tight')
 
-def plot_scope(time, channel_data, multi: bool=False):
+def plot_scope(time, channel_data, titles=[], multi: bool=False):
+
+    labels = []
+    if titles:
+        for title in titles:
+            labels.append(title)
+    if not titles or len(titles) < len(channel_data):
+        for index in range(len(titles), len(channel_data), 1):
+            labels.append(f'Channel {index+1}')
 
     if multi:
         num = len(channel_data)
@@ -107,15 +115,17 @@ def plot_scope(time, channel_data, multi: bool=False):
         fig.supylabel('Voltage (V)')
 
         for index, axis in enumerate(ax):
-            axis.set_title(f'Channel {index+1}')
+            axis.set_title(labels[index])
             axis.plot(time, channel_data[index], color=custom_cmap(index))
             
     else:
         fig, ax = mp.subplots()
         for index, data in enumerate(channel_data):
-            ax.plot(time, data, color=custom_cmap(index), label=f'Channel {index+1}')
+            ax.plot(time, data, color=custom_cmap(index), label=labels[index])
             ax.legend()
         ax.set(xlabel='Time ($\mu$s)', ylabel='Voltage (V)')
+    
+    return fig, ax
 
 def plot_T1_trigger(time_data, channel_data:list, i:dict=None):
     '''
@@ -167,6 +177,8 @@ def plot_T1_trigger(time_data, channel_data:list, i:dict=None):
     ax[1][1].plot(time_data[i['trig']+i['off']:i['ramp']], channel_data[i['trans']][i['trig']+i['off']:i['ramp']], label='cut', alpha=0.8)
     ax[1][1].set(ylabel='log scale (a.u.)')
     ax[1][1].set_yscale('log')
+
+    return fig, ax
 
 def plot_T1_fit(time, data, fit):
     '''
