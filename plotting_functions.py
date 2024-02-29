@@ -28,7 +28,7 @@ combined_colors = np.vstack([scope_rgba, og_colors])
 # Create a new colormap from the combined colors
 custom_cmap = ListedColormap(combined_colors)
 
-def plot_spectra(x_data, y_data, data_indexes = [], keys = list[str], shifter: int or float=0,
+def plot_spectra(x_data, y_data, data_indexes = [], keys = list[str], shifter: int=0,
             axis_lbls = None, sec_axis = True, save = False, 
             data_labels = [], lims: tuple = (), woi: list = [], res = 80):
     """
@@ -129,23 +129,21 @@ def plot_scope(time, channel_data, titles=[], multi: bool=False):
 
 def plot_T1_trigger(time_data, channel_data:list, i:dict=None):
     '''
-    Plot T1 data where trigger has been selected.
-    Used to check the trigger location
+    Plot T1 data where trig_iger has been selected.
+    Used to check the trig_iger location
 
     <time_data>:
         time channel data goes here
     <channel_data>:
-        channel data goes here as list
+        channel data goes here as list: [ref, trans]
     <i>:
-        trigger and channel indexes goes here as dictionary
+        trig_iger and channel indexes goes here as dictionary
 
     '''
     # default to plot all
     if not i:
-        i = {'ref': 0,
-            'trans':1,
-            'trig':0,
-            'r_off':-1,
+        i = {'trig':0,
+            'ref_off':-1,
             'off':-1,
             'ramp':-1}
 
@@ -156,25 +154,25 @@ def plot_T1_trigger(time_data, channel_data:list, i:dict=None):
 
     # plot linear reference data
     ax[0][0].set_title('Reference')
-    ax[0][0].plot(time_data[i['trig']:i['ramp']], channel_data[i['ref']][i['trig']:i['ramp']], label='raw', alpha=0.8)
-    ax[0][0].plot(time_data[i['trig']+i['r_off']:i['ramp']], channel_data[i['ref']][i['trig']+i['r_off']:i['ramp']], label='cut', alpha=0.8)
+    ax[0][0].plot(time_data[i['trig']:i['ramp']], channel_data[0][i['trig']:i['ramp']], label='raw', alpha=0.8)
+    ax[0][0].plot(time_data[i['trig']+i['ref_off']:i['ramp']], channel_data[0][i['trig']+i['ref_off']:i['ramp']], label='cut', alpha=0.8)
     ax[0][0].set(ylabel='Voltage (V)')
     # plot logarithmic reference data
     ax[1][0].set_title('Reference')
-    ax[1][0].plot(time_data[i['trig']:i['ramp']], channel_data[i['ref']][i['trig']:i['ramp']], label='raw', alpha=0.8)
-    ax[1][0].plot(time_data[i['trig']+i['r_off']:i['ramp']], channel_data[i['ref']][i['trig']+i['r_off']:i['ramp']], label='cut', alpha=0.8)
+    ax[1][0].plot(time_data[i['trig']:i['ramp']], channel_data[0][i['trig']:i['ramp']], label='raw', alpha=0.8)
+    ax[1][0].plot(time_data[i['trig']+i['ref_off']:i['ramp']], channel_data[0][i['trig']+i['ref_off']:i['ramp']], label='cut', alpha=0.8)
     ax[1][0].set(ylabel='log scale (a.u.)')
     ax[1][0].set_yscale('log')
     # plot linear transmitted data
     ax[0][1].set_title('Transmitted')
-    ax[0][1].plot(time_data[i['trig']:i['ramp']], channel_data[i['trans']][i['trig']:i['ramp']], label='raw', alpha=0.8)
-    ax[0][1].plot(time_data[i['trig']+i['off']:i['ramp']], channel_data[i['trans']][i['trig']+i['off']:i['ramp']], label='cut', alpha=0.8)
+    ax[0][1].plot(time_data[i['trig']:i['ramp']], channel_data[1][i['trig']:i['ramp']], label='raw', alpha=0.8)
+    ax[0][1].plot(time_data[i['trig']+i['off']:i['ramp']], channel_data[1][i['trig']+i['off']:i['ramp']], label='cut', alpha=0.8)
     ax[0][1].set(ylabel='Voltage (V)')
     ax[0][1].legend()
     # plot logarithmic transmitted data
     ax[1][1].set_title('Transmitted')
-    ax[1][1].plot(time_data[i['trig']:i['ramp']], channel_data[i['trans']][i['trig']:i['ramp']], label='raw', alpha=0.8)
-    ax[1][1].plot(time_data[i['trig']+i['off']:i['ramp']], channel_data[i['trans']][i['trig']+i['off']:i['ramp']], label='cut', alpha=0.8)
+    ax[1][1].plot(time_data[i['trig']:i['ramp']], channel_data[1][i['trig']:i['ramp']], label='raw', alpha=0.8)
+    ax[1][1].plot(time_data[i['trig']+i['off']:i['ramp']], channel_data[1][i['trig']+i['off']:i['ramp']], label='cut', alpha=0.8)
     ax[1][1].set(ylabel='log scale (a.u.)')
     ax[1][1].set_yscale('log')
 
@@ -187,7 +185,7 @@ def plot_T1_fit(time, data, fit):
     '''
     fig, ax = mp.subplots(nrows=1, ncols=2)
     
-    ax[0].set_title('Reference Fit')
+    ax[0].set_title('Data Fit')
     ax[0].plot(time, data, color='blue', alpha=0.5, label='Exp. Data')
     ax[0].plot(time, exp_decay((time), *fit), color='orange', linestyle='--', alpha=1, label='Fit')
     ax[0].ticklabel_format(axis='both', style='sci', scilimits=(0,0), useMathText = True)

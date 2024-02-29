@@ -625,4 +625,17 @@ def straight(x, a, b):
     """
     return a*x + b
 
+def print_T1_fit(fit_data):
+    """
+    Print out the values extracted from a T1 fit
+
+    <fit_data>:
+        tuple of fit and fit error
+    
+    """
+    print('T1 Fit Params:')
+    print("I0 : {0:2.2f} mV, T1 : {1:2.2f} us, Y0 : {2:2.2f} mV \n".format(fit_data[0][0]*1E3, fit_data[0][1]*1E6, fit_data[0][2]*1E3))
+    print('Fit Error data:')
+    print("dI0 : {0:2.2f} mV, dT1 : {1:2.3f} us, dY0 : {2:2.2f} mV \n".format(fit_data[1][0]*1E3,fit_data[1][1]*1E6, fit_data[1][2]*1E3))
+
     
