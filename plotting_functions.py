@@ -15,7 +15,7 @@ import numpy as np
 import os
 from fitting_functions import exp_decay
 
-mp.style.use('signature.mplstyle')
+mp.style.use(r'C:\Users\keena\Documents\University\PhD\Code\Lifetime\signature.mplstyle')
 
 scope_colours = ['gold', 'limegreen', 'orange', 'royalblue']
 scope_rgba = [to_rgba(colour) for colour in scope_colours]
@@ -96,7 +96,21 @@ def plot_spectra(x_data, y_data, data_indexes = [], keys = list[str], shifter: i
             fig.savefig(fname=name, dpi=res, format='png', bbox_inches='tight')
 
 def plot_scope(time, channel_data, titles=[], multi: bool=False):
+    '''
+    Plot scope data.
 
+    <time>:
+        time channel data goes here
+    <channel_data>:
+        channel data goes here as list
+    <titles>:
+        list of titles corresponding to channel_data
+        goes here
+    <multi>:
+        Choose to plot individual or on top of one another
+
+    '''
+    # set labels if they exist or not
     labels = []
     if titles:
         for title in titles:
@@ -104,10 +118,10 @@ def plot_scope(time, channel_data, titles=[], multi: bool=False):
     if not titles or len(titles) < len(channel_data):
         for index in range(len(titles), len(channel_data), 1):
             labels.append(f'Channel {index+1}')
-
+    # chosose plot type
     if multi:
-        num = len(channel_data)
 
+        num = len(channel_data)
         fig, ax = mp.subplots(nrows=num, ncols=1, sharex='all')
         # shared labels
         fig.tight_layout(w_pad=2, rect=[0.05, 0.05, 1, 1])
@@ -117,7 +131,6 @@ def plot_scope(time, channel_data, titles=[], multi: bool=False):
         for index, axis in enumerate(ax):
             axis.set_title(labels[index])
             axis.plot(time, channel_data[index], color=custom_cmap(index))
-            
     else:
         fig, ax = mp.subplots()
         for index, data in enumerate(channel_data):
@@ -129,15 +142,15 @@ def plot_scope(time, channel_data, titles=[], multi: bool=False):
 
 def plot_T1_trigger(time_data, channel_data:list, i:dict=None):
     '''
-    Plot T1 data where trig_iger has been selected.
-    Used to check the trig_iger location
+    Plot T1 data where trigger has been selected.
+    Used to check the trigger location
 
     <time_data>:
         time channel data goes here
     <channel_data>:
         channel data goes here as list: [ref, trans]
     <i>:
-        trig_iger and channel indexes goes here as dictionary
+        trigger and channel indexes goes here as dictionary
 
     '''
     # default to plot all
@@ -178,6 +191,38 @@ def plot_T1_trigger(time_data, channel_data:list, i:dict=None):
 
     return fig, ax
 
+def plot_T2_trigger(time_data, channel_data, i:dict=None):
+    '''
+    Plot T2 data where trigger has been selected.
+    Used to check the trigger location
+
+    <time_data>:
+        time channel data goes here
+    <channel_data>:
+        channel data goes here
+    <i>:
+        trigger and channel indexes goes here as dictionary
+
+    '''
+    # default to plot all
+    if not i:
+        i = {'trig': 0,
+             'off': 0,
+             'ramp': -1}
+
+    fig, ax = mp.subplots()
+    # tight layout and shared labels
+    fig.tight_layout(w_pad=2, rect=[0, 0.05, 1, 1])
+
+    # plot echo data
+    ax.set_title('Stimulated Emission')
+    ax.plot(time_data, channel_data, label='original data', alpha=0.8)
+    ax.plot(time_data[i['trig']+i['off']:i['ramp']], channel_data[i['trig']+i['off']:i['ramp']], label='echo selected', alpha=0.8)
+    ax.set(xlabel=('Time ($\mu$s)'), ylabel='Voltage (V)')
+    ax.legend(loc='best')
+
+    return fig, ax
+
 def plot_T1_fit(time, data, fit):
     '''
     Plot T1 fitted data on top of experimental data
@@ -196,6 +241,7 @@ def plot_T1_fit(time, data, fit):
     ax[1].plot(time, exp_decay((time), *fit), color='orange', linestyle='--', alpha=1, label='Fit')
     ax[1].set_yscale('log')
     ax[1].legend()
+    
    
 def zoom(data, bounds:tuple=()):
     """

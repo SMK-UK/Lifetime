@@ -6,10 +6,10 @@ config_params = dict(
     
     # Path to load data from and arguments used to disriminate files loaded
     
-    root                = r"C:\Users\Keena\Desktop",
-    file                = 'test_T1',
-    extensions          = ('.csv', '.txt'),
-    exceptions          = (),
+    root                = r"C:\Users\keena\Desktop",
+    file                = "0329_Fluor_duration",
+    extensions          = ['.csv', '.txt'],
+    exceptions          = [],
     
     # Index positions for relevant column data in excel files
     
@@ -17,7 +17,7 @@ config_params = dict(
     time                = 0,
     trig                = 1,
     ref                 = 3,
-    trans               =2
+    trans               = 2
     ),
 
     # Index positions for trimming the data

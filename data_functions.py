@@ -72,7 +72,7 @@ def extract_dict(path, delimiter=None):
                 (key, entry) = temp 
                 dictionary[key] = entry
 
-def dir_interogate(path: str, extensions: tuple[str, ...] = (), 
+def dir_interogate(path: str, extensions: list[str] = [], 
                    exceptions: list[str] = [], 
                    folders: list[str] = []) -> tuple[list[str], list[str]]:
     """
@@ -91,11 +91,10 @@ def dir_interogate(path: str, extensions: tuple[str, ...] = (),
     folder_list : list of folder names
     file_list : list of file names
 
-    """
+    """       
     folder_list = []
     file_list = []
     for root, dirs, files in natsorted(os.walk(path)):
-
         if dirs:
             dirs = natsorted(dirs)
             if not folders:
@@ -119,8 +118,8 @@ def dir_interogate(path: str, extensions: tuple[str, ...] = (),
             else:
                 temp_files = [file for file in temp_files]
             if extensions:
-                temp_files = [file for file in temp_files
-                              if file.endswith(extensions)]
+                    temp_files = [file for file in temp_files
+                              if file.endswith(tuple(extensions))]
             if temp_files:
                 file_list.append(natsorted(temp_files))
 
@@ -253,37 +252,42 @@ def open_text(path: str):
 
 def search_paths(folders: list[str], files: list[str], include: list[str] = [], exclude: list[str] = []) -> list[str]:
     """
-    search a list of paths for keys and join files to folders
-        
-    Parameters
-    ----------
+    Search a list of paths for files and join them to folders.
+
+    Parameters:
+    -----------
     folders : list of folder names
     files : list of file names
-    keys : keywords to search folders and files for
-    
-    Returns
-    -------
-    paths : list of desired paths
+    include : keywords to include paths
+    exclude : keywords to exclude paths
 
+    Returns:
+    --------
+    paths : list of desired paths
     """
+
+    # check if folders is a list
+    if not isinstance(folders, list):
+        folders = [folders]
+    # check if files is nested list
+    if not isinstance(files[0], list):
+        files = [files]
+
     paths = []
     for index, folder in enumerate(folders):
         desired = []
         for file in files[index]:
             path = os.path.join(folder, file)
-            if include:
-                if any([x in path for x in include]):
-                    desired.append(path)
-            else:
+            # Check if path should be included based on include and exclude lists
+            if (not include or any(x in path for x in include)) and \
+               (not exclude or not any(y in path for y in exclude)):
                 desired.append(path)
-            if exclude:
-                desired = [x for x in desired
-                               if not any([y in path for y in exclude])]
         if desired:
             paths.append(desired)
 
+    # Flatten the list if only one sublist is present
     if len(paths) == 1:
-        paths = [data for sublist in paths for data in sublist]
+        paths = paths[0]
 
     return paths
 
@@ -347,7 +351,7 @@ def write_json(file_name, data):
     
     '''
     with open(file_name, 'w') as f:
-        json.dump(data, f)
+        json.dump(data, f, indent=4)
     
 def read_json(file_name):
     '''
