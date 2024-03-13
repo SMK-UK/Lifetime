@@ -12,6 +12,9 @@ lines.linewidth: 0.8
 lines.solid_capstyle: round
 lines.markersize: 5
 
+### ERRORBARS
+errorbar.capsize: 2.5
+
 ### PATCHES
 patch.facecolor: 0072B2
 

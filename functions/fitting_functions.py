@@ -2,7 +2,7 @@
 Generic fitting functions 
 '''
 
-from math_functions import zoom
+from functions.math_functions import zoom
 import numpy as np
 from scipy.optimize import curve_fit
 from scipy.signal import find_peaks, fftconvolve
