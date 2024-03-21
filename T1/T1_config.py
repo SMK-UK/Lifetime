@@ -6,8 +6,8 @@ config_params = dict(
     
     # Path to load data from and arguments used to disriminate files loaded
     
-    root                = r"C:\Users\keena\Desktop\1221_T1\1221_T1",
-    file                = r"power_3",
+    root                = r"C:\Users\keena\Desktop",
+    file                = r"0329_Fluor_duration",
     extensions          = ['.csv', '.txt'],
     exceptions          = [],
     
@@ -33,7 +33,7 @@ config_params = dict(
     # Guess T1 times for the data
 
     guess_ref_T1 = 1E-6,
-    guess_T1 = 160E-6
+    guess_T1 = 10E-6
 
 )
 
