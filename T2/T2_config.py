@@ -6,8 +6,8 @@ config_params = dict(
     
     # Path to load data from and arguments used to disriminate files loaded
     
-    root                = r"C:\Users\keena\Downloads\2023_PrYSO\1406_T2_10",
-    file                = r"pi_0",
+    root                = "C:/Users/keena/Downloads/",
+    file                = "0403_T2",
     extensions          = ['.csv', '.txt'],
     exceptions          = [],
     

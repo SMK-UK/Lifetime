@@ -4,7 +4,7 @@ Config file for T1 measurements
 
 # Path to load data from and arguments used to disriminate files loaded
 
-root                = r"C:\Users\sk88\Heriot-Watt University Team Dropbox\RES_EPS_Quantum_Photonics_Lab\Experiments\Current Experiments\BB Telecom QM\2024_PrYSO\Fluorescence"
+root                = r"c:\Users\keena\Downloads"
 file                = r"0927"
 extensions          = ['.csv', '.json']
 
